@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ProgressBarMarker = styled.div<{ position: number }>`
   position: absolute;
-  bottom: -10%; // Adjust the top position to prevent overflow at the top: ;
+  bottom: -10%;
   left: ${(props) => `${props.position}%`};
   height: 110%;
   border-left: 2px solid darkgray;
@@ -13,7 +13,7 @@ export const ProgressBarWrapper = styled.div`
   height: 44px;
   background: gray;
   position: relative;
-  overflow: visible; 
+  overflow: visible;
 `;
 
 export const ProgressBarItem = styled.div<{ completed: number }>`

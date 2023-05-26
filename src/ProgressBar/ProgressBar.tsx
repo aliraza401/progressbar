@@ -14,25 +14,15 @@ import { ProgressBarProps } from "./ProgressBar.interface";
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   totalTasks,
   completedTasks,
-  proTasks,
-  heroTasks,
-  legendTasks,
+  tasksProgressBarTiers,
 }) => {
   const completedPercent = (completedTasks / totalTasks) * 100;
-  const proPercent = (proTasks / totalTasks) * 100;
-  const heroPercent = (heroTasks / totalTasks) * 100;
-  const legendPercent = (legendTasks / totalTasks) * 100;
 
   const nextLevelTasks = () => {
-    if (completedTasks < proTasks) {
-      return proTasks - completedTasks;
-    } else if (completedTasks < heroTasks) {
-      return heroTasks - completedTasks;
-    } else if (completedTasks < legendTasks) {
-      return legendTasks - completedTasks;
-    } else {
-      return 0;
-    }
+    const nextLevel = tasksProgressBarTiers.find(
+      (tier) => completedTasks < tier.tasks
+    );
+    return nextLevel ? nextLevel.tasks - completedTasks : 0;
   };
 
   const message =
@@ -47,25 +37,19 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       </h5>
       <ProgressBarWrapper>
         <ProgressBarItem completed={completedPercent} />
-        <ProgressBarMarker position={proPercent} />
-        <ProgressBarMarker position={heroPercent} />
-        <ProgressBarMarker position={legendPercent} />
+        {tasksProgressBarTiers.map((tier) => (
+          <React.Fragment key={tier.title}>
+            <ProgressBarMarker position={(tier.tasks / totalTasks) * 100} />
+            <Label position={(tier.tasks / totalTasks) * 100 - 2}>
+              <LabelTitle>{tier.title}</LabelTitle>
+              <LabelTasks>{tier.tasks} Tasks</LabelTasks>
+            </Label>
+          </React.Fragment>
+        ))}
         <TaskCounter>{completedTasks}</TaskCounter>
         <ScoreCard>{completedTasks}</ScoreCard>
         <Label position={0}>
           <LabelTitle>Player</LabelTitle>
-        </Label>
-        <Label position={proPercent - 2}>
-          <LabelTitle>Pro</LabelTitle>
-          <LabelTasks>{proTasks} Tasks</LabelTasks>
-        </Label>
-        <Label position={heroPercent - 2}>
-          <LabelTitle>Hero</LabelTitle>
-          <LabelTasks>{heroTasks} Tasks</LabelTasks>
-        </Label>
-        <Label position={legendPercent - 2}>
-          <LabelTitle>Legend</LabelTitle>
-          <LabelTasks>{legendTasks} Tasks</LabelTasks>
         </Label>
       </ProgressBarWrapper>
     </div>
